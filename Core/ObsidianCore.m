@@ -29,7 +29,7 @@ static ObsidianCore *sharedInstance;
 		while (hasWhitespacePrefix(components[i])) if (--i < 0) fail(3, ([NSString stringWithFormat:@"Multi-line value doesn't belong to any key. Final line: %d", endIndex+1]))
 		NSMutableArray *fieldComponents = [[components[i] componentsSeparatedByString:@":"] mutableCopy];
 		if (fieldComponents.count < 2) fail(4, ([NSString stringWithFormat:@"Field doesn't contain a value. Line: %d", i+1]));
-		NSString *key = fieldComponents[0];
+		NSString *key = [(NSString *)fieldComponents[0] lowercaseString];
 		[fieldComponents removeObjectAtIndex:0];
 		NSMutableString *value = [[fieldComponents componentsJoinedByString:@":"] mutableCopy];
 		while (value.length > 0 && hasWhitespacePrefix(value)) [value deleteCharactersInRange:NSMakeRange(0, 1)];
@@ -99,13 +99,24 @@ static ObsidianCore *sharedInstance;
 	if (!targetViewController) return;
 	NSError *error;
 	NSArray<NSDictionary<NSString *, NSString *> *> *parsedStatusFile = [self.class parseFileAtPath:@"/var/lib/dpkg/status" error:&error];
+	__kindof UIViewController *vc;
 	if (error || !parsedStatusFile) {
-		NSLog(@"%@", error);
+		vc = [UIAlertController alertControllerWithTitle:@"Error" message:[NSString stringWithFormat:@"Failed to parse the DPKG status file. %@", error.localizedDescription ?: @"The reason is unknown."] preferredStyle:UIAlertControllerStyleAlert];
+		[(UIAlertController *)vc addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil]];
 	}
 	else {
-		UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[parsedStatusFile.description] applicationActivities:nil];
-		[targetViewController presentViewController:activityVC animated:YES completion:nil];
+		NSMutableString *userFriendlyString = [NSMutableString new];
+		for (NSDictionary<NSString *, NSString *> *entry in parsedStatusFile) {
+			if (!entry[@"package"] || !entry[@"name"]) continue;
+			[userFriendlyString appendFormat:@"- %@\nVisible name: %@\nVersion: %@\n\n",
+				entry[@"package"],
+				entry[@"name"] ?: entry[@"package"],
+				entry[@"version"] ?: @"(Unknown)"
+			];
+		}
+		vc = [[UIActivityViewController alloc] initWithActivityItems:@[userFriendlyString.copy] applicationActivities:nil];
 	}
+	[targetViewController presentViewController:vc animated:YES completion:nil];
 }
 
 + (UIBarButtonItem *)exportPackagesButton {
