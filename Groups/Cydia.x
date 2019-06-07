@@ -1,0 +1,4 @@
+
+void ObsidianInitializeCydia(void) {
+	
+}
