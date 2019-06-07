@@ -9,6 +9,7 @@
 - (void)viewDidLoad {
 	%orig;
 	self.navigationItem.leftBarButtonItem = [ObsidianCore exportPackagesButton];
+	ObsidianCore.targetViewController = self;
 }
 
 %end

@@ -4,7 +4,7 @@
 
 static bool didInitializeBefore;
 static Class packagesViewControllerClass;
-static __kindof UIViewController *installedPackagesController;
+static __kindof UIViewController * __weak installedPackagesController;
 
 void (*Obsidian$PackagesVC$viewWillAppear$orig)(id self, SEL _cmd, BOOL animated);
 void Obsidian$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
@@ -15,7 +15,7 @@ void Obsidian$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
 			UIViewController *vc = nc.viewControllers.firstObject;
 			NSLog(@"%@", vc);
 			if (vc == self) {
-				installedPackagesController = self;
+				ObsidianCore.targetViewController = installedPackagesController = self;
 				object_setClass(installedPackagesController.navigationItem, [ObsidianNavigationItem class]);
 				[installedPackagesController.navigationItem setLeftBarButtonItems:installedPackagesController.navigationItem.rightBarButtonItems];
 				break;
@@ -25,7 +25,7 @@ void Obsidian$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
 }
 
 void _ObsidianInitializeGenericApp(Class _packagesViewControllerClass) {
-	NSLog(@"ObsidianInitializeGenericApp(%@.class)", NSStringFromClass(_packagesViewControllerClass));
+	NSLog(@"ObsidianInitializeGenericApp(%@)", NSStringFromClass(_packagesViewControllerClass));
 	if ((didInitializeBefore = !didInitializeBefore)) {
 		if (_packagesViewControllerClass) {
 			packagesViewControllerClass = _packagesViewControllerClass;

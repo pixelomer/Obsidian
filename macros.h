@@ -4,6 +4,6 @@
 #if DEBUG
 #define NSLog(args...) NSLog(@"[Obsidian] "args)
 #else
-#define NSLog(...)
+#define NSLog(...) {}
 #endif
 #endif
