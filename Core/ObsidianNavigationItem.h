@@ -1,0 +1,2 @@
+@interface ObsidianNavigationItem : UINavigationItem
+@end

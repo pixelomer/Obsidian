@@ -1,6 +1,13 @@
+#include <substrate.h>
+
 %ctor {
-	void (*initAppSpecificHooks)(void) = MSFindSymbol(NULL, [NSString stringWithFormat:@"_ObsidianInitialize%@", NSProcessInfo.processInfo.processName].UTF8String);
-	if (initAppSpecificHooks != NULL) {
-		initAppSpecificHooks();
+	NSString *symbol = [NSString stringWithFormat:@"_ObsidianInitialize%@", NSProcessInfo.processInfo.processName];
+	void (*InitializeHooks)(void) = MSFindSymbol(NULL, symbol.UTF8String);
+	if (InitializeHooks != NULL) {
+		NSLog(@"%@()", symbol);
+		InitializeHooks();
+	}
+	else {
+		NSLog(@"Symbol not found: %@", symbol);
 	}
 }
