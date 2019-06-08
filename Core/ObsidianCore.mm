@@ -26,9 +26,10 @@ static ObsidianCore *sharedInstance;
 	for (int i = components.count-1; i >= 0; i--) {
 		if ([components[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length <= 0) continue;
 		int endIndex = i;
-		while (hasWhitespacePrefix(components[i])) if (--i < 0) fail(3, ([NSString stringWithFormat:@"Multi-line value doesn't belong to any key. Final line: %d", endIndex+1]))
+		while (hasWhitespacePrefix(components[i])) if (--i < 0) fail(3, ([NSString stringWithFormat:@"Multi-line value doesn't belong to any key. Line: %d", endIndex+1]))
 		NSMutableArray *fieldComponents = [[components[i] componentsSeparatedByString:@":"] mutableCopy];
-		if (fieldComponents.count < 2) fail(4, ([NSString stringWithFormat:@"Field doesn't contain a value. Line: %d", i+1]));
+		if (fieldComponents.count <= 0) fail(4, ([NSString stringWithFormat:@"Empty line: %d", i+1]))
+		else if (fieldComponents.count == 1) [fieldComponents addObject:@""];
 		NSString *key = [(NSString *)fieldComponents[0] lowercaseString];
 		[fieldComponents removeObjectAtIndex:0];
 		NSMutableString *value = [[fieldComponents componentsJoinedByString:@":"] mutableCopy];
@@ -54,7 +55,6 @@ static ObsidianCore *sharedInstance;
 	NSMutableArray *parsedEntries = [NSMutableArray arrayWithCapacity:rawEntries.count];
 	for (NSString *rawEntry in rawEntries) {
 		if ([rawEntry isEqualToString:@""]) continue;
-		NSLog(@"\"%@\"", rawEntry);
 		NSError *error;
 		NSDictionary *parsedEntry = [self parsePackageEntry:rawEntry error:&error];
 		if (error) {

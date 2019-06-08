@@ -2,7 +2,7 @@
 
 %ctor {
 	NSString *symbol = [NSString stringWithFormat:@"_ObsidianInitialize%@", NSProcessInfo.processInfo.processName];
-	void (*InitializeHooks)(void) = MSFindSymbol(NULL, symbol.UTF8String);
+	void (*InitializeHooks)(void) = (void(*)())MSFindSymbol(NULL, symbol.UTF8String);
 	if (InitializeHooks != NULL) {
 		NSLog(@"%@()", symbol);
 		InitializeHooks();

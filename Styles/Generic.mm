@@ -1,4 +1,4 @@
-#import "Groups.h"
+#import "Styles.h"
 #import <substrate.h>
 #import <objc/runtime.h>
 
@@ -6,9 +6,9 @@ static bool didInitializeBefore;
 static Class packagesViewControllerClass;
 static __kindof UIViewController * __weak installedPackagesController;
 
-void (*Obsidian$PackagesVC$viewWillAppear$orig)(id self, SEL _cmd, BOOL animated);
-void Obsidian$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
-	Obsidian$PackagesVC$viewWillAppear$orig(self, _cmd, animated);
+void (*Obsidian$Generic$PackagesVC$viewWillAppear$orig)(id self, SEL _cmd, BOOL animated);
+void Obsidian$Generic$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
+	Obsidian$Generic$PackagesVC$viewWillAppear$orig(self, _cmd, animated);
 	if (!installedPackagesController) {
 		UITabBarController *tabBarController = (id)UIApplication.sharedApplication.keyWindow.rootViewController;
 		for (UINavigationController *nc in tabBarController.viewControllers) {
@@ -24,12 +24,12 @@ void Obsidian$PackagesVC$viewWillAppear$hook(id self, SEL _cmd, BOOL animated) {
 	}
 }
 
-void _ObsidianInitializeGenericApp(Class _packagesViewControllerClass) {
+void ObsidianInitializeGenericApp(Class _packagesViewControllerClass) {
 	NSLog(@"ObsidianInitializeGenericApp(%@)", NSStringFromClass(_packagesViewControllerClass));
 	if ((didInitializeBefore = !didInitializeBefore)) {
 		if (_packagesViewControllerClass) {
 			packagesViewControllerClass = _packagesViewControllerClass;
-			MSHookMessageEx(packagesViewControllerClass, @selector(viewWillAppear:), (IMP)&Obsidian$PackagesVC$viewWillAppear$hook, (IMP *)&Obsidian$PackagesVC$viewWillAppear$orig);
+			MSHookMessageEx(packagesViewControllerClass, @selector(viewWillAppear:), (IMP)&Obsidian$Generic$PackagesVC$viewWillAppear$hook, (IMP *)&Obsidian$Generic$PackagesVC$viewWillAppear$orig);
 		}
 		else {
 			@throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"The class cannot be null." userInfo:nil];
