@@ -32,7 +32,8 @@ void ObsidianInitializeGenericApp(Class _packagesViewControllerClass) {
 			MSHookMessageEx(packagesViewControllerClass, @selector(viewWillAppear:), (IMP)&Obsidian$Generic$PackagesVC$viewWillAppear$hook, (IMP *)&Obsidian$Generic$PackagesVC$viewWillAppear$orig);
 		}
 		else {
-			@throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"The class cannot be null." userInfo:nil];
+			// Let's not crash everything because of a simple problem that doesn't break anything
+			//@throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"The class cannot be null." userInfo:nil];
 		}
 	}
 	else {

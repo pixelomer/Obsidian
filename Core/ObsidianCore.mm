@@ -108,7 +108,7 @@ static ObsidianCore *sharedInstance;
 		NSMutableString *userFriendlyString = [NSMutableString new];
 		for (NSDictionary<NSString *, NSString *> *entry in parsedStatusFile) {
 			if (!entry[@"package"] || !entry[@"name"]) continue;
-			[userFriendlyString appendFormat:@"- %@\nVisible name: %@\nVersion: %@\n\n",
+			[userFriendlyString appendFormat:@"- %@  \nVisible name: %@  \nVersion: %@\n\n",
 				entry[@"package"],
 				entry[@"name"] ?: entry[@"package"],
 				entry[@"version"] ?: @"(Unknown)"

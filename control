@@ -1,7 +1,7 @@
 Package: com.pixelomer.obsidian
 Name: Obsidian
 Depends: mobilesubstrate, firmware (>=6.0)
-Version: 1.0
+Version: 1.1
 Architecture: iphoneos-arm
 Description: The universal package list exporter
   This is a tweak that allows you to export your package list from Sileo, Zebra and Cydia. All you need to do is tapping the share button in the "Installed Packages" section of your package manager.

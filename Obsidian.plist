@@ -1,1 +1,1 @@
-{ Filter = { Bundles = ( "com.saurik.Cydia", "org.coolstar.SileoStore", "xyz.willy.Zebra", "org.coolstar.SileoDemo", "com.notdan.Lime" ); }; }
+{ Filter = { Bundles = ( "com.saurik.Cydia", "xyz.willy.Zebra", "com.notdan.Lime" ); Classes = ( "CSTextRenderView" ); }; }
